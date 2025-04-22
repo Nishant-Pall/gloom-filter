@@ -29,19 +29,7 @@ func newGloomFilter(length int, hashes int) (GloomFilter, error) {
 	gloomFilter.len = length
 	gloomFilter.createGloomArr()
 	gloomFilter.createSeed()
-
-	gloomFilter.hashes = make([]func(string) uint64, hashes)
-
-	for index := range gloomFilter.hashes {
-
-		// generation should be outside invokation obviously
-		n := rand.Uint64N(100)
-
-		gloomFilter.hashes[index] = func(s string) uint64 {
-			return gloomFilter.mapHash(s) * n
-		}
-	}
-
+	gloomFilter.generateHashFunctions(hashes)
 	gloomFilter.hashLen = len(gloomFilter.hashes)
 
 	return gloomFilter, nil
@@ -62,6 +50,21 @@ func (f *GloomFilter) createGloomArr() {
 
 func (f *GloomFilter) createSeed() {
 	f.seed = maphash.MakeSeed()
+}
+
+func (f *GloomFilter) generateHashFunctions(hashes int) {
+	f.hashes = make([]func(string) uint64, hashes)
+
+	for index := range f.hashes {
+
+		// generation should be outside invokation obviously
+		n := rand.Uint64N(100)
+
+		f.hashes[index] = func(s string) uint64 {
+			return f.mapHash(s) * n
+		}
+	}
+
 }
 
 func (f *GloomFilter) addItem(s string) {
