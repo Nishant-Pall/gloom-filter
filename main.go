@@ -18,7 +18,7 @@ func main() {
 	hashes := 5
 
 	gloomFilter := NewGloomFilter()
-	gloomFilter.createGloomFilter(len, hashes, MapHash)
+	gloomFilter.instantiateGloomFilter(len, hashes, MapHash)
 
 	gloomFilter.AddItem("NISHANT")
 	gloomFilter.AddItem("ARUSHI")
@@ -54,7 +54,7 @@ type GloomFilter struct {
 	hashLen  int
 }
 
-func (gloomFilter *GloomFilter) createGloomFilter(length int, hashes int, hashFunc GloomFilterHashFunc) error {
+func (gloomFilter *GloomFilter) instantiateGloomFilter(length int, hashes int, hashFunc GloomFilterHashFunc) error {
 	if length < 1 {
 		return fmt.Errorf("length cannot be less than 1")
 	}
